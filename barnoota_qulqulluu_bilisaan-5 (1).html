@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="om">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Barnoota Qulqulluu</title>
+<style>
+:root{--green:#176b4d;--gold:#e8b84c;--paper:#f7f8f4;--ink:#18231f}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:var(--paper);color:var(--ink)}
+header{background:linear-gradient(135deg,#114b39,#21835c);color:white;padding:24px 18px 20px;border-radius:0 0 24px 24px}
+header h1{margin:0 0 6px;font-size:25px}header p{margin:0;opacity:.92}
+main{max-width:760px;margin:auto;padding:16px}
+.search{width:100%;padding:13px;border:1px solid #d8ded9;border-radius:12px;font-size:16px;margin:5px 0 15px}
+h2{font-size:20px;margin:18px 0 10px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{background:white;border:1px solid #e4e8e3;border-radius:15px;padding:15px;box-shadow:0 3px 10px #10251a08}
+.card .emoji{font-size:25px}.card h3{font-size:16px;margin:7px 0}.card p{font-size:13px;color:#5c6962;margin:0 0 10px}
+button{border:0;background:var(--green);color:white;border-radius:10px;padding:10px 13px;font-weight:650;font-size:14px;cursor:pointer}
+.secondary{background:#e7f2ec;color:var(--green)}.verse{background:#fff8e5;border-left:4px solid var(--gold);padding:16px;border-radius:12px;line-height:1.6}
+#lesson{display:none;background:white;border-radius:16px;padding:18px;margin-top:14px;border:1px solid #e1e7e1}
+#lesson h2{margin-top:0}#lesson p{line-height:1.65}#lesson ul{line-height:1.8}
+.quizq{margin:12px 0;padding:12px;background:#f5f7f4;border-radius:10px}
+.quizq label{display:block;padding:6px 0}.notice{font-size:12px;color:#647169;line-height:1.5;margin:18px 0}
+nav{display:flex;gap:8px;overflow:auto;padding:4px 0 12px}nav button{white-space:nowrap}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style></head>
+<body>
+<header><div style="font-size:12px;letter-spacing:1.5px">BARNOOTA KIRISTAANAA</div><h1>📖 Barnoota Qulqulluu</h1><p>Dubbii Waaqayyoo Afaan Oromootiin baradhu.</p></header>
+<main>
+<nav><button onclick="showHome()">Mana</button><button class="secondary" onclick="showBooks()">Kitaabota 66</button><button class="secondary" onclick="showQuiz()">Qormaata</button></nav>
+<div id="home">
+<input class="search" id="search" placeholder="Barnoota barbaadi..." oninput="filterCards()">
+<div class="verse"><strong>📜 Caqasa guyyaa</strong><br>“Dubbii kee miila koo duratti ibsaa, karaa koos ifa dha.”<br><small>Faarfannaa 119:105</small></div>
+<h2>Barnoota filadhu</h2><div class="grid" id="cards"></div>
+<p class="notice">Hubachiisa: Kun jalqaba barnootaati. Hiika caqasotaa Kitaaba Qulqulluu kee waliin dubbisi; barumsa murteessaa irratti barsiisaa amantaa amanamaa gaafadhu.</p>
+</div>
+<div id="books" style="display:none"><h2>Kitaabota Kitaaba Qulqulluu</h2><p>Kitaabota keessaa tokko filadhu.</p><div class="grid" id="bookgrid"></div></div>
+<div id="lesson"><button class="secondary" onclick="back()">← Deebi'i</button><div id="lessonbody"></div></div>
+<div id="quiz" style="display:none"><h2>Qormaata gabaabaa</h2><p>Deebii sirrii filadhu.</p>
+<div class="quizq"><strong>1. Kitaabni jalqabaa Kitaaba Qulqulluu kami?</strong><label><input type="radio" name="q1" value="0"> Ba’uu</label><label><input type="radio" name="q1" value="1"> Uumama</label><label><input type="radio" name="q1" value="0"> Faarfannaa</label></div>
+<div class="quizq"><strong>2. Akka Yohannis 3:16, Waaqayyo eenyuuf jaalala agarsiise?</strong><label><input type="radio" name="q2" value="1"> Addunyaa</label><label><input type="radio" name="q2" value="0"> Mootota qofa</label><label><input type="radio" name="q2" value="0"> Ergamoota qofa</label></div>
+<div class="quizq"><strong>3. Yesuus akka barsiiseetti, namoonni wal jaallachuu qabu?</strong><label><input type="radio" name="q3" value="1"> Eeyyee</label><label><input type="radio" name="q3" value="0"> Lakki</label></div>
+<button onclick="grade()">Deebii ilaali</button><p id="score"></p></div>
+</main>
+<script>
+const topics=[
+['✝️','Fayyina','Yesuus Kiristoositti amanuu, ayyaana Waaqayyoo fi jireenya haaraa.','Fayyinni kennaa ayyaana Waaqayyooti. Kiristiyaanni cubbuu isaa amanatee gara Waaqayyootti deebi’a, Yesuus Kiristoositti amanas.','Efesoon 2:8–9; Roomaa 10:9–10'],
+['🕊️','Barnoota hafuuraa','Kadhannaa, amantii, jaalala fi jireenya qulqulluu.','Jireenyi hafuuraa Dubbii Waaqayyoo dubbisuu, kadhachuu, jaalalaan jiraachuu fi hojii gaarii hojjechuu of keessatti qabata. Guddinni guyyaa guyyaan ta’a.','Galaatiyaa 5:22–23; 1 Phexros 2:2'],
+['⏳','Bara dhumaa','Abdii Kiristaanaa fi deebi’uu Yesuus.','Kitaabni Qulqulluun Yesuus deebi’uu isaa barsiisa. Guyyaa fi sa’aatii tilmaamuun sirrii miti; kanaaf dammaqoo taanee, amanamoo fi jaalala qabeeyyii taanee jiraanna.','Maatewos 24:36; 1 Tasalonqee 4:16–18'],
+['💍','Gaa’ela','Jaalala, kabaja, amanamummaa fi araara.','Gaa’elli waliif of kennuu, wal kabajuu, dhugaa dubbachuu, wal dhaggeeffachuu fi rakkoo nagaan hiikuu barbaada. Miidhaa ykn doorsisa keessa jiraachuun dirqama miti; gargaarsa amanamaa barbaadi.','Efesoon 5:25; 1 Qorontos 13:4–7'],
+['📖','Kitaaba Qulqulluu','Akkaataa dubbisuu fi hubachuu.','Caqasa dubbisi, eenyutu dubbate ilaali, haala isaa hubadhu, ergaa isaa irratti yaadi, waan baratte jireenya kee keessatti hojiirra oolchi.','2 Ximotewos 3:16–17'],
+['🙏','Kadhannaa','Waaqayyotti garaa banachuun dubbachuu.','Kadhannaan galata, faaruu, himannaa, gaaffii fi araara gaafachuu of keessatti qaba. Jechoota dheeraa qofaan osoo hin taane garaa dhugaatiin kadhadhu.','Maatewos 6:9–13']
+];
+const oldBooks='Uumama Ba’uu Lewwota Lakkoobsa Keessa Deebii Iyyaasuu Abbootii Firdii Ruut 1 Saamu’eel 2 Saamu’eel 1 Mootota 2 Mootota 1 Seenaa Baraa 2 Seenaa Baraa Izraa Nahimiyaa Asteer Iyyoob Faarfannaa Fakkeenya Lallaba Weedduu Weedduu Isaayaas Ermiyaas Faarfannaa Ermiyaas Hisqi’eel Daani’eel Hose’aa Yo’eel Amoos Obaadiyaa Yoonaas Miikiyaas Naahum Anbaaqom Sefaaniyaa Haagee Zakkaariyaas Milkiyaas'.split(' ');
+const newBooks='Maatewos Maarqos Luqaas Yohannis Hojii Ergamootaa Roomaa 1 Qorontos 2 Qorontos Galaatiyaa Efesoon Filiphisiiyus Qolosaayis 1 Tasalonqee 2 Tasalonqee 1 Ximotewos 2 Ximotewos Tiitoo Fiilemoon Ibroota Yaaqoob 1 Phexros 2 Phexros 1 Yohannis 2 Yohannis 3 Yohannis Yihudaa Mul’ata'.split(' ');
+function renderCards(list=topics){document.getElementById('cards').innerHTML=list.map((t,i)=>`<div class="card"><div class="emoji">${t[0]}</div><h3>${t[1]}</h3><p>${t[2]}</p><button onclick="openTopic(${topics.indexOf(t)})">Baradhu</button></div>`).join('')}
+function filterCards(){let q=document.getElementById('search').value.toLowerCase();renderCards(topics.filter(t=>t.join(' ').toLowerCase().includes(q)))}
+function hideAll(){['home','books','lesson','quiz'].forEach(x=>document.getElementById(x).style.display='none')}
+function showHome(){hideAll();document.getElementById('home').style.display='block'}
+function showBooks(){hideAll();document.getElementById('books').style.display='block';}
+function openTopic(i){hideAll();let t=topics[i];document.getElementById('lesson').style.display='block';document.getElementById('lessonbody').innerHTML=`<h2>${t[0]} ${t[1]}</h2><p><strong>Kaayyoo:</strong> ${t[2]}</p><p>${t[3]}</p><p><strong>Caqasa dubbisi:</strong> ${t[4]}</p><h3>Gaaffii ittiin yaadattu</h3><p>Barumsa kana irraa maal baratte? Torban kana hojii irra oolchuu dandeessu tokko barreessi.</p><textarea style="width:100%;min-height:90px;padding:10px;border:1px solid #ccd6ce;border-radius:10px" placeholder="Yaada kee asitti barreessi..."></textarea>`}
+function back(){showHome()}
+function showQuiz(){hideAll();document.getElementById('quiz').style.display='block'}
+function grade(){let s=0;for(let i=1;i<=3;i++){let a=document.querySelector('input[name=q'+i+']:checked');if(a)s+=Number(a.value)}document.getElementById('score').textContent='Bu’aan kee: '+s+'/3. '+(s===3?'Baay’ee gaarii!':'Deebii kee irra deebi’ii ilaali.')}
+const all=oldBooks.concat(newBooks);
+document.getElementById('bookgrid').innerHTML=all.map((b,i)=>`<div class="card"><h3>${i+1}. ${b}</h3><p>${i<39?'Kakuu Moofaa':'Kakuu Haaraa'}</p><button onclick="bookLesson('${b.replace(/'/g,"")}')">Seensa dubbisi</button></div>`).join('');
+function bookLesson(b){hideAll();document.getElementById('lesson').style.display='block';document.getElementById('lessonbody').innerHTML=`<h2>📖 ${b}</h2><p>Kitaaba ${b} barachuuf, Kitaaba Qulqulluu kee keessatti kitaaba kana jalqaba irraa dubbisi.</p><p>1. Eenyutu barreesse? (Yoo beekame)</p><p>2. Namoota, bakka fi taateewwan ijoo maal fa’i?</p><p>3. Waa’ee Waaqayyoo maal na barsiisa?</p><p>4. Barumsa kana akkamitti jireenya koo keessatti hojiirra oolcha?</p><p><strong>Hubachiisa:</strong> Kun seensa barnootaati; qabiyyeen guutuun kitaaba kanaa asitti hin dabalamu.</p>`}
+renderCards();
+</script></body></html>
